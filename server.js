@@ -1,8 +1,10 @@
-// import { error } from 'util';
-
-// import { request } from 'https';
 
 const HTTP = require('http')
+const { sendJSON } = require('./utils')
+const { sendHTML } = require('./utils')
+const { pageError } = require('./utils')
+
+const FS = require('fs');
 
 const server = HTTP.createServer((request, response) => {
   const path = request.url
@@ -14,17 +16,9 @@ const server = HTTP.createServer((request, response) => {
     response.end('Secret found')
   }
   else if (path === '/about') {
-    response.writeHead(200, {
-      'Content-Type': 'text/html'
-    })
-    response.end(`
-    <! doctype html>
-    <html>
-      <body>
-        <h1>About</h1>
-        <p>Action cable</p>
-      </body>
-    </html>
+    sendHTML(response, `
+      <h1>About</h1>
+      <p>Action cable</p>
     `)
   }
   else if (path === '/postcode.json') {
@@ -34,26 +28,37 @@ const server = HTTP.createServer((request, response) => {
     response.end('{ "name": "Melbourne", "postcode": 3000 }')
   }
   else if (path === '/postcode/3020') {
-    response.writeHead(200, {
-      'Content-Type': 'application/json'
-    })
-    response.end(JSON.stringify ([
-      {name: 'Albion', postcode: 3020 },
-      {name: 'Sunshine', postcode: 3020 }
-    ]))
+    sendJSON(response, [
+        {name: 'Albion', postcode: 3020 },
+        {name: 'Sunshine', postcode: 3020 }
+    ])
   }
-  else if (path === '/postcode/3020') {
-    response.writeHead(200, {
-      'Content-Type': 'application/json'
-    })
-    response.end(JSON.stringify ([
+  else if (path === '/postcode/3022') {
+    sendJSON(response, [
       {name: 'Deer Park East', postcode: 3022 },
       {name: 'Ardeer', postcode: 3022 }
-    ]))
+    ])
+  }
+  else if (path === '/postcode/3021') {
+    sendJSON(response, [
+      {name: 'Kings Park', postcode: 3021 },
+      {name: 'Kealba', postcode: 3021 }
+    ])
+  }
+  else if (path === '/assets/main.css') {
+    response.writeHead(200, {
+      'Content-Type': 'text/css'
+    })
+    response.end(`
+    h1 {
+      text-align: center;
+    }`)
+  }
+  else if (path === '/assets/example.gif') {
+    sendImage(response, 'binary');
   }
   else  {
-    response.writeHead(404)
-    response.end('Page not found')
+    pageError(response, {error: 'Page not found'})
   }
 })
 
