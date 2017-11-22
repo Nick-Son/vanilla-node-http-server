@@ -2,9 +2,8 @@
 const HTTP = require('http')
 const { sendJSON } = require('./utils')
 const { sendHTML } = require('./utils')
+const { sendImage } = require('./utils')
 const { pageError } = require('./utils')
-
-const FS = require('fs');
 
 const server = HTTP.createServer((request, response) => {
   const path = request.url
@@ -55,7 +54,7 @@ const server = HTTP.createServer((request, response) => {
     }`)
   }
   else if (path === '/assets/example.gif') {
-    sendImage(response, 'binary');
+    sendImage(response, './assets/example.gif');
   }
   else  {
     pageError(response, {error: 'Page not found'})

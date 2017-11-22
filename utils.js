@@ -1,3 +1,5 @@
+const FS = require('fs');
+
 function sendJSON(response, object) {
     response.writeHead(200, {
       'Content-Type': 'application/json'
@@ -30,11 +32,11 @@ function pageError(response, object) {
 }
 
 function sendImage(response, image) {
-  let img = FS.readFileSync('./assets/example.gif');
+  let img = FS.readFileSync(image);
   response.writeHead(200, {
     'Content-Type': 'image/gif'
   });
-  response.end(img, image);
+  response.end(img);
 }
 
 module.exports = {
