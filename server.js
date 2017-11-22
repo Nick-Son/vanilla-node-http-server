@@ -13,14 +13,47 @@ const server = HTTP.createServer((request, response) => {
   else if (path === '/opensesame') {
     response.end('Secret found')
   }
+  else if (path === '/about') {
+    response.writeHead(200, {
+      'Content-Type': 'text/html'
+    })
+    response.end(`
+    <! doctype html>
+    <html>
+      <body>
+        <h1>About</h1>
+        <p>Action cable</p>
+      </body>
+    </html>
+    `)
+  }
   else if (path === '/postcode.json') {
     response.writeHead(200, {
       'Content-Type': 'application/json'
     })
     response.end('{ "name": "Melbourne", "postcode": 3000 }')
   }
+  else if (path === '/postcode/3020') {
+    response.writeHead(200, {
+      'Content-Type': 'application/json'
+    })
+    response.end(JSON.stringify ([
+      {name: 'Albion', postcode: 3020 },
+      {name: 'Sunshine', postcode: 3020 }
+    ]))
+  }
+  else if (path === '/postcode/3020') {
+    response.writeHead(200, {
+      'Content-Type': 'application/json'
+    })
+    response.end(JSON.stringify ([
+      {name: 'Deer Park East', postcode: 3022 },
+      {name: 'Ardeer', postcode: 3022 }
+    ]))
+  }
   else  {
-    response.end('Back at you')
+    response.writeHead(404)
+    response.end('Page not found')
   }
 })
 
